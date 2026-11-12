@@ -63,11 +63,10 @@ class Task:
     def __str__(self) -> str:
         return (
             f"ID: {self.id} | "
-            f"Title: {self.title} | "
+            f"Title: {self.title} [{self.category}] | "
             f"Status: {self.status} | "
             f"Priority: {self.priority} | "
             f"Deadline: {self.deadline} | "
-            f"Category: {self.category}"
         )
 
     def __repr__(self):
