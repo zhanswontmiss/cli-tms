@@ -93,3 +93,6 @@ class Task:
             dct["priority"],
             dct["status"]
         )
+
+    def is_urgent(self):
+        return self.priority in ["High", "Critical"]
