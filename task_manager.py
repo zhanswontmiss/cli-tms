@@ -76,4 +76,7 @@ class TaskManager:
                 print("Error: Missing required field in task data!")
             except ValueError as e:
                 print(f"Error: {e}")
+
+    def get_task_count(self):
+        return len(self.tasks)
             
