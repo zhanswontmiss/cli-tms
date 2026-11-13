@@ -26,16 +26,13 @@ class TestTaskManager(unittest.TestCase):
         self.assertEqual(self.manager.tasks[1], self.task)
 
     def test_add_duplicate_task(self):
+        duplicate = Task(1, "Another task", "2026-11-15", "Study")
+
         self.manager.add_task(self.task)
-
-        output = StringIO()
-        duplicate = Task(1, "Learn SQL", "2026-11-15", "Study")
-
-        with redirect_stdout(output):
+        with self.assertRaises(ValueError):
             self.manager.add_task(duplicate)
 
-        self.assertEqual(self.manager.tasks[1], self.task)
-        self.assertIn("already exists", output.getvalue())
+        self.assertEqual(self.manager.get_task_count(), 1)
 
     def test_remove_task(self):
         self.manager.add_task(self.task)
@@ -46,9 +43,12 @@ class TestTaskManager(unittest.TestCase):
 
 
     def test_remove_nonexistent_task(self):
-        self.manager.remove_task(999)
+        initial_count = self.manager.get_task_count()
 
-        self.assertEqual(len(self.manager.tasks), 0)
+        with self.assertRaises(ValueError):
+            self.manager.remove_task(999)
+
+        self.assertEqual(self.manager.get_task_count(), initial_count)
 
     def test_get_task(self):
         self.manager.add_task(self.task)

@@ -44,36 +44,46 @@ class Task:
         self.status = "Completed"
 
     def change_priority(self, priority: str) -> None:
-        priorities = ["Low", "Medium", "High", "Critical"]
-        if priority in priorities:
-            self.priority = priority
-        else:
-            print("Invalid priority type")
+        if priority not in self.valid_priorities:
+            raise ValueError("Invalid task priority!")
+
+        self.priority = priority
 
     def update_status(self, status: str) -> None:
-        statuses = ["To Do", "In Progress", "Completed"]
-        if status in statuses:
-             self.status = status
-        else:
-            print("Invalid status")
+        if status not in self.valid_statuses:
+            raise ValueError("Invalid task status!")
+
+        self.status = status
         
     def change_deadline(self, deadline) -> None:
+        if not isinstance(deadline, str):
+            raise ValueError("Deadline must be a string!")
+
+        try:
+            datetime.strptime(deadline, "%Y-%m-%d")
+        except ValueError:
+            raise ValueError("Invalid task deadline is set!") from None
+
         self.deadline = deadline
 
     def __str__(self) -> str:
         return (
             f"ID: {self.id} | "
-            f"Title: {self.title} |"
+            f"Title: {self.title} | "
             f"Deadline: {self.deadline} | "
             f"Category: {self.category} | "
             f"Status: {self.status} | "
-            f"Priority: {self.priority} | "
+            f"Priority: {self.priority}"
         )
 
-    def __repr__(self):
-        return f"Task(title='{self.title}', status='{self.status}', priority='{self.priority}', deadline='{self.deadline}', category='{self.category}')"
+    def __repr__(self) -> str:
+        return (
+            f"Task(id={self.id}, title='{self.title}', "
+            f"deadline='{self.deadline}', category='{self.category}', "
+            f"priority='{self.priority}', status='{self.status}')"
+        )
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return { 
             "id": self.id,
             "title": self.title,
@@ -84,7 +94,7 @@ class Task:
         }
 
     @classmethod
-    def from_dict(cls, dct):
+    def from_dict(cls, dct: dict) -> "Task":
         return cls(
             dct["id"], 
             dct["title"], 
@@ -94,5 +104,5 @@ class Task:
             dct["status"]
         )
 
-    def is_urgent(self):
+    def is_urgent(self) -> bool:
         return self.priority in ["High", "Critical"]

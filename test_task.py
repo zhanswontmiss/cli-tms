@@ -55,6 +55,64 @@ class TestTask(unittest.TestCase):
             Task(1, "Learn Python", "2026-11-12", "Study",
                  "Medium", "Started")
 
+    def test_update_status(self):
+        task = Task(1, "Learn Python", "2026-11-12", "Study")
+
+        task.update_status("In Progress")
+
+        self.assertEqual(task.status, "In Progress")
+
+
+    def test_update_invalid_status(self):
+        task = Task(1, "Learn Python", "2026-11-12", "Study")
+
+        with self.assertRaises(ValueError):
+            task.update_status("Started")
+
+        self.assertEqual(task.status, "To Do")
+
+
+    def test_change_priority(self):
+        task = Task(1, "Learn Python", "2026-11-12", "Study")
+
+        task.change_priority("Critical")
+
+        self.assertEqual(task.priority, "Critical")
+
+
+    def test_change_invalid_priority(self):
+        task = Task(1, "Learn Python", "2026-11-12", "Study")
+
+        with self.assertRaises(ValueError):
+            task.change_priority("Urgent")
+
+        self.assertEqual(task.priority, "Medium")
+
+    def test_change_deadline(self):
+        task = Task(1, "Learn Python", "2026-11-12", "Study")
+
+        task.change_deadline("2026-12-01")
+
+        self.assertEqual(task.deadline, "2026-12-01")
+
+
+    def test_change_deadline_invalid_format(self):
+        task = Task(1, "Learn Python", "2026-11-12", "Study")
+
+        with self.assertRaises(ValueError):
+            task.change_deadline("01-12-2026")
+
+        self.assertEqual(task.deadline, "2026-11-12")
+
+
+    def test_change_deadline_invalid_type(self):
+        task = Task(1, "Learn Python", "2026-11-12", "Study")
+
+        with self.assertRaises(ValueError):
+            task.change_deadline(20261201)
+
+        self.assertEqual(task.deadline, "2026-11-12")
+
 
 if __name__ == "__main__":
     unittest.main()
